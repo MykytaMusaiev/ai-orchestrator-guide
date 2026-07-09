@@ -1,13 +1,14 @@
 "use client";
 
 import { useId, useState } from "react";
-import { getGateTitle } from "@/content/gates";
-import type { DecisionScenario } from "@/content/scenarios";
+import type { DecisionScenario, GateId, UiDictionary } from "@/content";
 
 type DecisionToolProps = {
   title: string;
   intro: string;
   scenarios: readonly DecisionScenario[];
+  gateTitles: Record<GateId, string>;
+  ui: UiDictionary["interactives"];
   extraMeta?: (scenario: DecisionScenario) => React.ReactNode;
 };
 
@@ -15,6 +16,8 @@ export function DecisionTool({
   title,
   intro,
   scenarios,
+  gateTitles,
+  ui,
   extraMeta,
 }: DecisionToolProps) {
   const headingId = useId();
@@ -33,13 +36,13 @@ export function DecisionTool({
   return (
     <section className="interactive" aria-labelledby={headingId}>
       <div className="interactive__header">
-        <p className="eyebrow">Interactive</p>
+        <p className="eyebrow">{ui.eyebrow}</p>
         <h2 id={headingId}>{title}</h2>
         <p>{intro}</p>
       </div>
 
       {scenarios.length > 1 ? (
-        <div className="interactive__tabs" aria-label={`${title} scenarios`}>
+        <div className="interactive__tabs" aria-label={`${title} ${ui.scenariosLabel}`}>
           {scenarios.map((item) => (
             <button
               aria-pressed={item.id === scenario.id}
@@ -70,7 +73,7 @@ export function DecisionTool({
           role="group"
         >
           <p className="sr-only" id={choiceGroupId}>
-            Choose the orchestrator move for this scenario.
+            {ui.choiceInstruction}
           </p>
           {scenario.choices.map((choice) => (
             <button
@@ -91,21 +94,21 @@ export function DecisionTool({
               {selectedChoice.feedback}
             </p>
             <p>
-              <strong>Correct move:</strong> {scenario.correctMove}
+              <strong>{ui.correctMove}</strong> {scenario.correctMove}
             </p>
             <p>
-              <strong>Consequence:</strong> {scenario.consequence}
+              <strong>{ui.consequence}</strong> {scenario.consequence}
             </p>
             {scenario.relatedGates.length ? (
-              <div className="concept-row" aria-label="Related gates">
+              <div className="concept-row" aria-label={ui.relatedGates}>
                 {scenario.relatedGates.map((gateId) => (
-                  <span key={gateId}>{getGateTitle(gateId)}</span>
+                  <span key={gateId}>{gateTitles[gateId]}</span>
                 ))}
               </div>
             ) : null}
           </div>
         ) : (
-          <p className="interactive__hint">Choose a move to reveal feedback.</p>
+          <p className="interactive__hint">{ui.chooseHint}</p>
         )}
       </div>
     </section>

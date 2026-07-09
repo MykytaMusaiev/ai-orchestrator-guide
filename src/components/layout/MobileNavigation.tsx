@@ -2,14 +2,16 @@
 
 import { useEffect, useId, useState } from "react";
 import Link from "next/link";
-import type { ChapterNavItem } from "@/content/sections";
-import { getChapterHref } from "@/content/sections";
+import type { ChapterNavItem, Locale, UiDictionary } from "@/content";
+import { getChapterHref, getPracticeHref, getReferencesHref } from "@/lib/i18n/routing";
 
 type MobileNavigationProps = {
   activeChapterId?: string;
   activeItem?: "chapters" | "continue" | "practice" | "refs";
   chapters: readonly ChapterNavItem[];
   continueHref: string;
+  locale: Locale;
+  ui: Pick<UiDictionary, "layout" | "navigation">;
 };
 
 export function MobileNavigation({
@@ -17,6 +19,8 @@ export function MobileNavigation({
   activeItem = "chapters",
   chapters,
   continueHref,
+  locale,
+  ui,
 }: MobileNavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const titleId = useId();
@@ -39,7 +43,7 @@ export function MobileNavigation({
 
   return (
     <>
-      <nav className="bottom-nav" aria-label="Mobile quick navigation">
+      <nav className="bottom-nav" aria-label={ui.layout.mobileQuickNavigation}>
         <button
           aria-current={activeItem === "chapters" ? "page" : undefined}
           aria-expanded={isOpen}
@@ -47,32 +51,32 @@ export function MobileNavigation({
           onClick={() => setIsOpen(true)}
           type="button"
         >
-          Chapters
+          {ui.navigation.chapters}
         </button>
         <Link
           aria-current={activeItem === "continue" ? "page" : undefined}
           href={continueHref}
         >
-          Continue
+          {ui.navigation.continue}
         </Link>
         <Link
           aria-current={activeItem === "practice" ? "page" : undefined}
-          href="/practice"
+          href={getPracticeHref(locale)}
         >
-          Practice
+          {ui.navigation.practice}
         </Link>
         <Link
           aria-current={activeItem === "refs" ? "page" : undefined}
-          href="/references"
+          href={getReferencesHref(locale)}
         >
-          Refs
+          {ui.navigation.refs}
         </Link>
       </nav>
 
       {isOpen ? (
         <div className="chapter-sheet" role="presentation">
           <button
-            aria-label="Close chapter picker"
+            aria-label={ui.layout.closeChapterPicker}
             className="chapter-sheet__backdrop"
             onClick={() => setIsOpen(false)}
             type="button"
@@ -85,9 +89,9 @@ export function MobileNavigation({
           >
             <div className="chapter-sheet__header">
               <span aria-hidden="true" />
-              <h2 id={titleId}>Chapters</h2>
+              <h2 id={titleId}>{ui.navigation.chapters}</h2>
               <button
-                aria-label="Close chapters"
+                aria-label={ui.layout.closeChapters}
                 className="chapter-sheet__close"
                 onClick={() => setIsOpen(false)}
                 type="button"
@@ -99,16 +103,16 @@ export function MobileNavigation({
               {chapters.map((chapter) => {
                 const isCurrent = chapter.id === activeChapterId;
                 const statusLabel = isCurrent
-                  ? "Current"
+                  ? ui.navigation.current
                   : chapter.status === "planned"
-                    ? "Planned"
+                    ? ui.navigation.planned
                     : null;
 
                 return (
                   <Link
                     aria-current={isCurrent ? "page" : undefined}
                     className="chapter-sheet__item"
-                    href={getChapterHref(chapter)}
+                    href={getChapterHref(chapter, locale)}
                     key={chapter.id}
                     onClick={() => setIsOpen(false)}
                   >

@@ -1,31 +1,50 @@
  "use client";
 
-import { getPattern } from "@/content/patterns";
-import type { WorkflowClassifierCase } from "@/content/scenarios";
+import type {
+  DecisionScenario,
+  GateId,
+  UiDictionary,
+  WorkflowClassifierCase,
+  WorkflowPatternId,
+  WorkflowPattern,
+} from "@/content";
 import { DecisionTool } from "./DecisionTool";
 
 type WorkflowClassifierProps = {
   cases: readonly WorkflowClassifierCase[];
+  gateTitles: Record<GateId, string>;
+  patterns: readonly WorkflowPattern[];
+  ui: UiDictionary["interactives"];
 };
 
-export function WorkflowClassifier({ cases }: WorkflowClassifierProps) {
+export function WorkflowClassifier({
+  cases,
+  gateTitles,
+  patterns,
+  ui,
+}: WorkflowClassifierProps) {
+  const getPattern = (id: WorkflowPatternId) =>
+    patterns.find((pattern) => pattern.id === id);
+
   return (
     <DecisionTool
-      title="Workflow Classifier"
-      intro="Classify the workflow pattern and notice the orchestrator risk before work starts."
+      title={ui.workflowClassifierTitle}
+      intro={ui.workflowClassifierIntro}
       scenarios={cases}
-      extraMeta={(scenario) => {
+      gateTitles={gateTitles}
+      ui={ui}
+      extraMeta={(scenario: DecisionScenario) => {
         const item = scenario as WorkflowClassifierCase;
         const pattern = getPattern(item.patternId);
 
         return pattern ? (
           <dl className="meta-grid">
             <div>
-              <dt>Target pattern</dt>
+              <dt>{ui.targetPattern}</dt>
               <dd>{pattern.title}</dd>
             </div>
             <div>
-              <dt>Risk</dt>
+              <dt>{ui.risk}</dt>
               <dd>{pattern.orchestratorRisk}</dd>
             </div>
           </dl>

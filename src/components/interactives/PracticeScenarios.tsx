@@ -1,25 +1,33 @@
  "use client";
 
-import type { PracticeScenario } from "@/content/scenarios";
+import type { DecisionScenario, GateId, PracticeScenario, UiDictionary } from "@/content";
 import { DecisionTool } from "./DecisionTool";
 
 type PracticeScenariosProps = {
   scenarios: readonly PracticeScenario[];
+  gateTitles: Record<GateId, string>;
+  ui: UiDictionary["interactives"];
 };
 
-export function PracticeScenarios({ scenarios }: PracticeScenariosProps) {
+export function PracticeScenarios({
+  scenarios,
+  gateTitles,
+  ui,
+}: PracticeScenariosProps) {
   return (
     <DecisionTool
-      title="Practice Scenarios"
-      intro="Mixed scenarios combine ownership, source of truth, UI QA, zoom-out, durable correction, permission gates, and high-risk boundaries."
+      title={ui.practiceScenariosTitle}
+      intro={ui.practiceScenariosIntro}
       scenarios={scenarios}
-      extraMeta={(scenario) => {
+      gateTitles={gateTitles}
+      ui={ui}
+      extraMeta={(scenario: DecisionScenario) => {
         const item = scenario as PracticeScenario;
 
         return (
           <dl className="meta-grid">
             <div>
-              <dt>Durable correction candidate</dt>
+              <dt>{ui.durableCorrectionCandidate}</dt>
               <dd>{item.durableCorrectionCandidate}</dd>
             </div>
           </dl>

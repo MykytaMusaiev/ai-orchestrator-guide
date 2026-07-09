@@ -1,13 +1,14 @@
 "use client";
 
 import { useId, useState } from "react";
-import type { LearningCheckpoint } from "@/content/sections";
+import type { LearningCheckpoint, UiDictionary } from "@/content";
 
 type RevealBlockProps = {
   checkpoint: LearningCheckpoint;
+  ui: UiDictionary["learning"];
 };
 
-export function RevealBlock({ checkpoint }: RevealBlockProps) {
+export function RevealBlock({ checkpoint, ui }: RevealBlockProps) {
   const [isRevealed, setIsRevealed] = useState(false);
   const revealId = useId();
 
@@ -18,8 +19,8 @@ export function RevealBlock({ checkpoint }: RevealBlockProps) {
       aria-labelledby={`${checkpoint.id}-title`}
     >
       <div className="reveal-block__prompt">
-        <p className="eyebrow">Decision checkpoint</p>
-        <h2 id={`${checkpoint.id}-title`}>Make the authority call</h2>
+        <p className="eyebrow">{ui.decisionCheckpoint}</p>
+        <h2 id={`${checkpoint.id}-title`}>{ui.checkpointTitle}</h2>
         <p>{checkpoint.prompt}</p>
         <p className="checkpoint-instruction">{checkpoint.instruction}</p>
       </div>
@@ -31,7 +32,7 @@ export function RevealBlock({ checkpoint }: RevealBlockProps) {
         onClick={() => setIsRevealed((current) => !current)}
         type="button"
       >
-        {isRevealed ? "Hide expected move" : "Reveal expected move"}
+        {isRevealed ? ui.hideExpectedMove : ui.revealExpectedMove}
       </button>
 
       {isRevealed ? (
@@ -43,9 +44,9 @@ export function RevealBlock({ checkpoint }: RevealBlockProps) {
             ))}
           </ul>
           <div className="durable-habit">
-            <strong>Durable habit:</strong> {checkpoint.durableHabit}
+            <strong>{ui.durableHabit}</strong> {checkpoint.durableHabit}
           </div>
-          <div className="concept-row" aria-label="Related concepts">
+          <div className="concept-row" aria-label={ui.relatedConcepts}>
             {checkpoint.relatedConcepts.map((concept) => (
               <span key={concept}>{concept}</span>
             ))}

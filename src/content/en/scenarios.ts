@@ -1,48 +1,11 @@
-import type { GateId } from "./gates";
-import type { WorkflowPatternId } from "./patterns";
-
-export type Choice = {
-  id: string;
-  label: string;
-  feedback: string;
-  correct?: boolean;
-};
-
-export type DecisionScenario = {
-  id: string;
-  title: string;
-  situation: string;
-  choices: Choice[];
-  correctMove: string;
-  consequence: string;
-  relatedGates: GateId[];
-};
-
-export type SelfCheckCard = {
-  id: string;
-  prompt: string;
-  revealTitle: string;
-  reveal: string;
-  relatedGates?: GateId[];
-};
-
-export type AuthorityMatrixCase = DecisionScenario & {
-  authorityLayer: string;
-  sourceOfTruth: string;
-};
-
-export type WorkflowClassifierCase = DecisionScenario & {
-  patternId: WorkflowPatternId;
-};
-
-export type LocalLearningCase = DecisionScenario & {
-  failureSignal: string;
-  durableTarget: string;
-};
-
-export type PracticeScenario = DecisionScenario & {
-  durableCorrectionCandidate: string;
-};
+import type {
+  AuthorityMatrixCase,
+  DecisionScenario,
+  LocalLearningCase,
+  PracticeScenario,
+  SelfCheckCard,
+  WorkflowClassifierCase,
+} from "../schemas";
 
 export const selfCheckCards = [
   {

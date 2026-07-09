@@ -1,29 +1,33 @@
  "use client";
 
-import type { AuthorityMatrixCase } from "@/content/scenarios";
+import type { AuthorityMatrixCase, DecisionScenario, GateId, UiDictionary } from "@/content";
 import { DecisionTool } from "./DecisionTool";
 
 type AuthorityMatrixProps = {
   cases: readonly AuthorityMatrixCase[];
+  gateTitles: Record<GateId, string>;
+  ui: UiDictionary["interactives"];
 };
 
-export function AuthorityMatrix({ cases }: AuthorityMatrixProps) {
+export function AuthorityMatrix({ cases, gateTitles, ui }: AuthorityMatrixProps) {
   return (
     <DecisionTool
-      title="Source-of-Truth Authority Matrix"
-      intro="Choose the authority layer before choosing whether the agent can continue."
+      title={ui.authorityMatrixTitle}
+      intro={ui.authorityMatrixIntro}
       scenarios={cases}
-      extraMeta={(scenario) => {
+      gateTitles={gateTitles}
+      ui={ui}
+      extraMeta={(scenario: DecisionScenario) => {
         const item = scenario as AuthorityMatrixCase;
 
         return (
           <dl className="meta-grid">
             <div>
-              <dt>Authority layer</dt>
+              <dt>{ui.authorityLayer}</dt>
               <dd>{item.authorityLayer}</dd>
             </div>
             <div>
-              <dt>Source of truth</dt>
+              <dt>{ui.sourceOfTruth}</dt>
               <dd>{item.sourceOfTruth}</dd>
             </div>
           </dl>

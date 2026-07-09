@@ -1,29 +1,37 @@
  "use client";
 
-import type { LocalLearningCase } from "@/content/scenarios";
+import type { DecisionScenario, GateId, LocalLearningCase, UiDictionary } from "@/content";
 import { DecisionTool } from "./DecisionTool";
 
 type LocalLearningWizardProps = {
   cases: readonly LocalLearningCase[];
+  gateTitles: Record<GateId, string>;
+  ui: UiDictionary["interactives"];
 };
 
-export function LocalLearningWizard({ cases }: LocalLearningWizardProps) {
+export function LocalLearningWizard({
+  cases,
+  gateTitles,
+  ui,
+}: LocalLearningWizardProps) {
   return (
     <DecisionTool
-      title="Local Learning Loop Wizard"
-      intro="Classify the failure signal and route the correction to the smallest durable layer that will intercept it later."
+      title={ui.localLearningTitle}
+      intro={ui.localLearningIntro}
       scenarios={cases}
-      extraMeta={(scenario) => {
+      gateTitles={gateTitles}
+      ui={ui}
+      extraMeta={(scenario: DecisionScenario) => {
         const item = scenario as LocalLearningCase;
 
         return (
           <dl className="meta-grid">
             <div>
-              <dt>Failure signal</dt>
+              <dt>{ui.failureSignal}</dt>
               <dd>{item.failureSignal}</dd>
             </div>
             <div>
-              <dt>Durable target</dt>
+              <dt>{ui.durableTarget}</dt>
               <dd>{item.durableTarget}</dd>
             </div>
           </dl>

@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import type { ChapterNavItem, LearningChapter } from "@/content/sections";
-import { firstAvailableChapter, getChapterHref } from "@/content/sections";
+import type { ChapterNavItem, LearningChapter, Locale, UiDictionary } from "@/content";
+import { getChapterHref, getLocaleRootHref } from "@/lib/i18n/routing";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MobileNavigation } from "./MobileNavigation";
 
 type SiteShellProps = {
@@ -12,33 +13,40 @@ type SiteShellProps = {
   chapter?: LearningChapter;
   chapters: readonly ChapterNavItem[];
   children: ReactNode;
+  locale: Locale;
+  ui: Pick<UiDictionary, "layout" | "navigation">;
 };
 
 export function SiteShell({
   activeChapterId,
   bottomNavActive = "chapters",
-  currentHref = getChapterHref(firstAvailableChapter),
+  currentHref,
   mobileContext = "Learning path",
   chapter,
   chapters,
   children,
+  locale,
+  ui,
 }: SiteShellProps) {
+  const continueHref = chapter ? getChapterHref(chapter, locale) : currentHref ?? getLocaleRootHref(locale);
+
   return (
     <div className="site-shell">
-      <aside className="sidebar" aria-label="Chapter navigation">
-        <Link className="brand" href="/">
+      <aside className="sidebar" aria-label={ui.layout.chapterNavigation}>
+        <Link className="brand" href={getLocaleRootHref(locale)}>
           <span className="brand__mark">AO</span>
           <span>
-            <strong>Orchestrator Learning</strong>
-            <small>Practice-oriented workflow judgment</small>
+            <strong>{ui.layout.brandTitle}</strong>
+            <small>{ui.layout.brandSubtitle}</small>
           </span>
         </Link>
+        <LanguageSwitcher locale={locale} ui={ui.layout} />
         <nav className="chapter-nav">
           {chapters.map((navItem) => (
             <Link
               aria-current={navItem.id === activeChapterId ? "page" : undefined}
               className={`chapter-nav__item chapter-nav__item--${navItem.status}`}
-              href={getChapterHref(navItem)}
+              href={getChapterHref(navItem, locale)}
               key={navItem.id}
             >
               <span>{navItem.label}</span>
@@ -51,16 +59,19 @@ export function SiteShell({
 
       <div className="main-column">
         <header className="mobile-topbar">
-          <Link className="brand" href="/">
+          <Link className="brand" href={getLocaleRootHref(locale)}>
             <span className="brand__mark">AO</span>
             <span>
-              <strong>Orchestrator Learning</strong>
+              <strong>{ui.layout.brandTitle}</strong>
               <small>{mobileContext}</small>
             </span>
           </Link>
-          <Link className="mobile-map-link" href="/">
-            Overview
-          </Link>
+          <div className="mobile-topbar__actions">
+            <LanguageSwitcher locale={locale} ui={ui.layout} />
+            <Link className="mobile-map-link" href={getLocaleRootHref(locale)}>
+              {ui.layout.overview}
+            </Link>
+          </div>
         </header>
 
         <main className="content" id="top">
@@ -71,7 +82,9 @@ export function SiteShell({
           activeChapterId={activeChapterId}
           activeItem={bottomNavActive}
           chapters={chapters}
-          continueHref={chapter ? getChapterHref(chapter) : currentHref}
+          continueHref={continueHref}
+          locale={locale}
+          ui={{ layout: ui.layout, navigation: ui.navigation }}
         />
       </div>
     </div>

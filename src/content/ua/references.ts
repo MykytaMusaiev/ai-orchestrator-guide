@@ -1,28 +1,4 @@
-export type ReferenceId =
-  | "anthropic-building-effective-agents"
-  | "anthropic-agent-evals"
-  | "openai-practical-agents"
-  | "langgraph-workflows-agents"
-  | "langchain-human-in-loop"
-  | "willison-agent-definition"
-  | "karpathy-software-30"
-  | "addy-osmani-loop-engineering"
-  | "openai-codex-docs"
-  | "claude-code-docs";
-
-export type ReferenceStatus = "research-backlog-anchor" | "current-docs-needed";
-
-export type ReferenceCategory = "core" | "vendor-docs" | "advanced";
-
-export type Reference = {
-  id: ReferenceId;
-  label: string;
-  title: string;
-  url: string;
-  category: ReferenceCategory;
-  status: ReferenceStatus;
-  note: string;
-};
+import type { Reference, ReferenceId } from "../schemas";
 
 export const references = {
   "anthropic-building-effective-agents": {
@@ -33,7 +9,7 @@ export const references = {
     category: "core",
     status: "research-backlog-anchor",
     note:
-      "Research anchor for workflow versus agent framing, common workflow patterns, and simple-first agent system design.",
+      "Опорне дослідницьке джерело для пояснення workflow versus agent, поширених workflow patterns і simple-first design для agent systems.",
   },
   "anthropic-agent-evals": {
     id: "anthropic-agent-evals",
@@ -43,7 +19,7 @@ export const references = {
     category: "core",
     status: "research-backlog-anchor",
     note:
-      "Research anchor for treating evals as verification assets. Validate exact claims during a source-backed pass.",
+      "Опорне дослідницьке джерело для evals як перевірних артефактів. Точні твердження треба перевіряти під час проходу, підкріпленого джерелами.",
   },
   "openai-practical-agents": {
     id: "openai-practical-agents",
@@ -53,7 +29,7 @@ export const references = {
     category: "core",
     status: "research-backlog-anchor",
     note:
-      "Research anchor for practical agent design and tool-use workflow concepts. Validate against current official docs later.",
+      "Опорне дослідницьке джерело для практичного agent design і workflow concepts із використанням інструментів. Пізніше перевірити за актуальними official docs.",
   },
   "langgraph-workflows-agents": {
     id: "langgraph-workflows-agents",
@@ -63,7 +39,7 @@ export const references = {
     category: "core",
     status: "research-backlog-anchor",
     note:
-      "Framework-backed reference for workflows and agents. MVP uses the vocabulary only, not the runtime.",
+      "Framework-backed джерело для workflows and agents. MVP використовує словник, не runtime.",
   },
   "langchain-human-in-loop": {
     id: "langchain-human-in-loop",
@@ -73,7 +49,7 @@ export const references = {
     category: "core",
     status: "research-backlog-anchor",
     note:
-      "Research anchor for approve, edit, reject, or respond style human decisions in agent workflows.",
+      "Опорне дослідницьке джерело для людських рішень approve, edit, reject або respond-style в agent workflows.",
   },
   "willison-agent-definition": {
     id: "willison-agent-definition",
@@ -83,7 +59,7 @@ export const references = {
     category: "core",
     status: "research-backlog-anchor",
     note:
-      "Research anchor for compact agent definitions around tools in a loop. Validate exact wording later.",
+      "Опорне дослідницьке джерело для компактних визначень agent навколо інструментів у loop. Точне формулювання треба перевірити пізніше.",
   },
   "karpathy-software-30": {
     id: "karpathy-software-30",
@@ -93,7 +69,7 @@ export const references = {
     category: "advanced",
     status: "research-backlog-anchor",
     note:
-      "Advanced anchor for generation-verification and practical LLM workflow framing.",
+      "Advanced anchor для generation-verification і практичного пояснення LLM workflow.",
   },
   "addy-osmani-loop-engineering": {
     id: "addy-osmani-loop-engineering",
@@ -103,7 +79,7 @@ export const references = {
     category: "advanced",
     status: "research-backlog-anchor",
     note:
-      "Advanced reading only. Do not make this the MVP blueprint.",
+      "Лише advanced reading. Не робіть це MVP blueprint.",
   },
   "openai-codex-docs": {
     id: "openai-codex-docs",
@@ -113,7 +89,7 @@ export const references = {
     category: "vendor-docs",
     status: "current-docs-needed",
     note:
-      "Use only after checking current official docs for sandboxing, approvals, skills, and product behavior.",
+      "Використовуйте тільки після перевірки актуальних official docs для sandboxing, approvals, skills і поведінки продукту.",
   },
   "claude-code-docs": {
     id: "claude-code-docs",
@@ -123,6 +99,6 @@ export const references = {
     category: "vendor-docs",
     status: "current-docs-needed",
     note:
-      "Use only after checking current official docs for permissions, security, skills, hooks, and subagents.",
+      "Використовуйте тільки після перевірки current official docs для permissions, security, skills, hooks і subagents.",
   },
 } satisfies Record<ReferenceId, Reference>;

@@ -1,23 +1,4 @@
-import type { GateId } from "./gates";
-
-export type WorkflowPatternId =
-  | "prompt-chaining"
-  | "routing"
-  | "parallelization"
-  | "orchestrator-worker"
-  | "evaluator-optimizer"
-  | "agent";
-
-export type WorkflowPattern = {
-  id: WorkflowPatternId;
-  title: string;
-  means: string;
-  useWhen: string;
-  avoidWhen: string;
-  orchestratorRisk: string;
-  requiredGate: GateId;
-  codingExample: string;
-};
+import type { WorkflowPattern, WorkflowPatternId } from "../schemas";
 
 export const workflowPatterns = [
   {
@@ -85,4 +66,3 @@ export const workflowPatterns = [
 export function getPattern(id: WorkflowPatternId) {
   return workflowPatterns.find((pattern) => pattern.id === id);
 }
-

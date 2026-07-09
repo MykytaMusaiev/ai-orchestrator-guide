@@ -1,19 +1,4 @@
-export type GateId =
-  | "validation"
-  | "source-of-truth"
-  | "ownership"
-  | "permission"
-  | "ui-qa"
-  | "lifecycle-close"
-  | "durable-correction";
-
-export type Gate = {
-  id: GateId;
-  title: string;
-  purpose: string;
-  useWhen: string;
-  watchOut: string;
-};
+import type { Gate, GateId } from "../schemas";
 
 export const gates = [
   {
@@ -70,4 +55,3 @@ export const gates = [
 export function getGateTitle(id: GateId) {
   return gates.find((gate) => gate.id === id)?.title ?? id;
 }
-

@@ -1,0 +1,2 @@
+export { getLocalizedContent } from "@/content";
+

@@ -1,18 +1,26 @@
  "use client";
 
-import type { DecisionScenario } from "@/content/scenarios";
+import type { DecisionScenario, GateId, UiDictionary } from "@/content";
 import { DecisionTool } from "./DecisionTool";
 
 type PermissionRiskStressTestProps = {
   cases: readonly DecisionScenario[];
+  gateTitles: Record<GateId, string>;
+  ui: UiDictionary["interactives"];
 };
 
-export function PermissionRiskStressTest({ cases }: PermissionRiskStressTestProps) {
+export function PermissionRiskStressTest({
+  cases,
+  gateTitles,
+  ui,
+}: PermissionRiskStressTestProps) {
   return (
     <DecisionTool
-      title="Permission / Risk Gate Stress-Test"
-      intro="Pause, explain the risk, identify the gate, and decide whether to ask approval, validate, stop, or zoom out."
+      title={ui.permissionRiskTitle}
+      intro={ui.permissionRiskIntro}
       scenarios={cases}
+      gateTitles={gateTitles}
+      ui={ui}
     />
   );
 }

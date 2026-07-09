@@ -1,4 +1,4 @@
-import type { Reference } from "@/content/references";
+import type { Reference } from "@/content";
 
 type SourceChipProps = {
   reference: Reference;
@@ -6,6 +6,7 @@ type SourceChipProps = {
 
 type SourceListProps = {
   references: readonly Reference[];
+  label: string;
 };
 
 export function SourceChip({ reference }: SourceChipProps) {
@@ -22,9 +23,9 @@ export function SourceChip({ reference }: SourceChipProps) {
   );
 }
 
-export function SourceList({ references }: SourceListProps) {
+export function SourceList({ references, label }: SourceListProps) {
   return (
-    <div className="source-list" aria-label="Source anchors for this chapter">
+    <div className="source-list" aria-label={label}>
       {references.map((reference) => (
         <article className="source-list__item" key={reference.id}>
           <div>
@@ -36,4 +37,3 @@ export function SourceList({ references }: SourceListProps) {
     </div>
   );
 }
-
