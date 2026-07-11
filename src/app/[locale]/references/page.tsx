@@ -1,9 +1,14 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { LearningCard } from "@/components/learning/LearningCard";
 import { SourceList } from "@/components/learning/SourceChip";
 import { getLocalizedContent, isLocale } from "@/content";
-import { getChapterHref } from "@/lib/i18n/routing";
+import {
+  getChapterHref,
+  getChapterSectionHref,
+  getPracticeHref,
+} from "@/lib/i18n/routing";
 
 type ReferencesPageProps = {
   params: Promise<{
@@ -51,6 +56,113 @@ export default async function ReferencesPage({ params }: ReferencesPageProps) {
         <p>{ui.references.sourcePolicyBody}</p>
       </LearningCard>
 
+      <LearningCard
+        eyebrow={ui.references.operationalEyebrow}
+        id="operational-index"
+        title={ui.references.operationalTitle}
+      >
+        <p>{ui.references.operationalBody}</p>
+        <div className="reference-index">
+          <article className="reference-index__item">
+            <h3>{ui.references.actionsTitle}</h3>
+            <p>{ui.references.actionsBody}</p>
+            <div className="concept-row">
+              <Link
+                href={getChapterSectionHref(
+                  "agentic-loop",
+                  "loop-shape",
+                  localeParam,
+                )}
+              >
+                {ui.references.loopDecisionsLink}
+              </Link>
+              <Link
+                href={getChapterSectionHref(
+                  "zoom-out",
+                  "zoom-signals",
+                  localeParam,
+                )}
+              >
+                {ui.references.zoomOutLink}
+              </Link>
+            </div>
+          </article>
+
+          <article className="reference-index__item">
+            <h3>{ui.references.gatesTitle}</h3>
+            <p>{ui.references.gatesBody}</p>
+            <div className="concept-row">
+              {content.gates.map((gate) => (
+                <Link
+                  href={getChapterSectionHref(
+                    "quality-gates",
+                    `gate-${gate.id}`,
+                    localeParam,
+                  )}
+                  key={gate.id}
+                >
+                  {gate.title}
+                </Link>
+              ))}
+            </div>
+          </article>
+
+          <article className="reference-index__item">
+            <h3>{ui.references.patternsTitle}</h3>
+            <p>{ui.references.patternsBody}</p>
+            <div className="concept-row">
+              {content.workflowPatterns.map((pattern) => (
+                <Link
+                  href={getChapterSectionHref(
+                    "core-workflow-patterns",
+                    `pattern-${pattern.id}`,
+                    localeParam,
+                  )}
+                  key={pattern.id}
+                >
+                  {pattern.title}
+                </Link>
+              ))}
+            </div>
+          </article>
+
+          <article className="reference-index__item">
+            <h3>{ui.references.checklistTitle}</h3>
+            <p>{ui.references.checklistBody}</p>
+            <div className="concept-row">
+              <Link
+                href={getChapterSectionHref(
+                  "operating-checklist",
+                  "checklist",
+                  localeParam,
+                )}
+              >
+                {ui.references.checklistLink}
+              </Link>
+            </div>
+          </article>
+
+          <article className="reference-index__item">
+            <h3>{ui.references.practiceTitle}</h3>
+            <p>{ui.references.practiceBody}</p>
+            <div className="concept-row">
+              <Link
+                href={getChapterSectionHref(
+                  "practice-scenarios",
+                  "capstone",
+                  localeParam,
+                )}
+              >
+                {ui.references.guidedPracticeLink}
+              </Link>
+              <Link href={getPracticeHref(localeParam)}>
+                {ui.references.directPracticeLink}
+              </Link>
+            </div>
+          </article>
+        </div>
+      </LearningCard>
+
       {ui.references.groups.map((group) => (
         <LearningCard
           eyebrow={group.eyebrow}
@@ -60,6 +172,7 @@ export default async function ReferencesPage({ params }: ReferencesPageProps) {
           <p>{group.description}</p>
           <SourceList
             label={ui.learning.sourceListLabel}
+            lifecycleUi={ui.references.sourceLifecycle}
             references={Object.values(references).filter(
               (reference) => reference.category === group.category,
             )}
@@ -69,4 +182,3 @@ export default async function ReferencesPage({ params }: ReferencesPageProps) {
     </SiteShell>
   );
 }
-

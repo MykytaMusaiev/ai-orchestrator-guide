@@ -54,6 +54,8 @@ export default async function PracticePage({ params }: PracticePageProps) {
       <PracticeScenarios
         scenarios={content.practiceScenarios}
         gateTitles={gateTitles}
+        locale={localeParam}
+        mode="assessment"
         ui={ui.interactives}
       />
     </SiteShell>

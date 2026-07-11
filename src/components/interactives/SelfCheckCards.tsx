@@ -1,15 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import type { GateId, SelfCheckCard, UiDictionary } from "@/content";
+import Link from "next/link";
+import type { GateId, Locale, SelfCheckCard, UiDictionary } from "@/content";
+import { getChapterSectionHref } from "@/lib/i18n/routing";
 
 type SelfCheckCardsProps = {
   cards: readonly SelfCheckCard[];
   gateTitles: Record<GateId, string>;
+  locale: Locale;
   ui: UiDictionary["interactives"];
 };
 
-export function SelfCheckCards({ cards, gateTitles, ui }: SelfCheckCardsProps) {
+export function SelfCheckCards({ cards, gateTitles, locale, ui }: SelfCheckCardsProps) {
   const [openId, setOpenId] = useState<string | null>(cards[0]?.id ?? null);
 
   return (
@@ -41,7 +44,16 @@ export function SelfCheckCards({ cards, gateTitles, ui }: SelfCheckCardsProps) {
                   {card.relatedGates?.length ? (
                     <div className="concept-row" aria-label={ui.relatedGates}>
                       {card.relatedGates.map((gateId) => (
-                        <span key={gateId}>{gateTitles[gateId]}</span>
+                        <Link
+                          href={getChapterSectionHref(
+                            "quality-gates",
+                            `gate-${gateId}`,
+                            locale,
+                          )}
+                          key={gateId}
+                        >
+                          {gateTitles[gateId]}
+                        </Link>
                       ))}
                     </div>
                   ) : null}

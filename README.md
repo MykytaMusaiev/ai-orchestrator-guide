@@ -24,10 +24,11 @@ Open the local app at `http://localhost:3000` when the dev server is running.
 ## Current MVP Scope
 
 - Route-based learning site:
-  - `/` overview and chapter map
-  - `/chapters/[slug]` chapter pages
-  - `/practice` cumulative practice scenarios
-  - `/references` research anchors and advanced reading
+  - `/` redirects to the default English locale
+  - `/{locale}` overview and chapter map
+  - `/{locale}/chapters/[slug]` chapter pages
+  - `/{locale}/practice` direct cumulative practice workspace
+  - `/{locale}/references` operational index, verified source anchors, and advanced reading
 - Fourteen chapter path based on the calibration artifact.
 - Seven lightweight, data-driven interactives:
   - Self-check / reveal cards
@@ -38,7 +39,11 @@ Open the local app at `http://localhost:3000` when the dev server is running.
   - Permission / Risk Gate Stress-Test
   - Practice Scenarios
 - Typed content files in `src/content/`.
+- English and Ukrainian routes and content with structural parity.
+- Shared source lifecycle metadata for exact URLs, verification dates, volatility, and vendor scope.
 - Dark blue/slate chapter-based UI with desktop sidebar and mobile bottom navigation.
+
+Ukrainian routes and content are implemented. Final linguistic consistency and native-speaker QA remain follow-up work; this is distinct from structural or content-model availability.
 
 ## Validation
 
@@ -76,7 +81,9 @@ Browser and visual QA are manual for this MVP. No Playwright or CI harness is cu
   - Feedback, consequence, correct move, related gates, and durable correction candidates are understandable.
 - References route:
   - Core references, vendor docs, and advanced reading are separated.
-  - Vendor behavior is framed as current-docs-needed, not universal behavior.
+  - Operational links reach canonical actions, gates, patterns, and checklist content.
+  - Vendor behavior is scoped to the named product, not presented as universal behavior.
+  - Source lifecycle metadata shows scope, volatility, and verification date.
   - Loop Engineering remains advanced reading, not the MVP blueprint.
 - Mobile:
   - Global bottom nav remains visible and touch-friendly.
@@ -94,4 +101,4 @@ Browser and visual QA are manual for this MVP. No Playwright or CI harness is cu
 
 ## Deferred Scope
 
-Deferred work includes source-backed research pass, richer progress persistence, scoring, full eval harness, framework/runtime demos, LangGraph implementation, Framer Motion, agent teams, hooks, subagents, worktrees, scheduled loops, and a full Ukrainian translation pass.
+Deferred work includes richer learning validation, progress persistence, scoring, a full eval harness, framework/runtime demos, LangGraph implementation, Framer Motion, agent teams, hooks, subagents, worktrees, scheduled loops, and final Ukrainian linguistic consistency/native-speaker QA.

@@ -67,6 +67,7 @@ function renderInteractive(
         <AuthorityMatrix
           cases={content.authorityMatrixCases}
           gateTitles={gateTitles}
+          locale={content.locale}
           ui={interactiveUi}
         />
       );
@@ -75,6 +76,7 @@ function renderInteractive(
         <WorkflowClassifier
           cases={content.workflowClassifierCases}
           gateTitles={gateTitles}
+          locale={content.locale}
           patterns={content.workflowPatterns}
           ui={interactiveUi}
         />
@@ -84,6 +86,7 @@ function renderInteractive(
         <AgenticLoopSimulator
           cases={content.agenticLoopCases}
           gateTitles={gateTitles}
+          locale={content.locale}
           ui={interactiveUi}
         />
       );
@@ -92,6 +95,7 @@ function renderInteractive(
         <LocalLearningWizard
           cases={content.localLearningCases}
           gateTitles={gateTitles}
+          locale={content.locale}
           ui={interactiveUi}
         />
       );
@@ -100,6 +104,7 @@ function renderInteractive(
         <PermissionRiskStressTest
           cases={content.permissionRiskCases}
           gateTitles={gateTitles}
+          locale={content.locale}
           ui={interactiveUi}
         />
       );
@@ -108,6 +113,8 @@ function renderInteractive(
         <PracticeScenarios
           scenarios={content.practiceScenarios}
           gateTitles={gateTitles}
+          locale={content.locale}
+          mode="guided"
           ui={interactiveUi}
         />
       );
@@ -116,6 +123,7 @@ function renderInteractive(
         <SelfCheckCards
           cards={content.selfCheckCards}
           gateTitles={gateTitles}
+          locale={content.locale}
           ui={interactiveUi}
         />
       );
@@ -135,7 +143,7 @@ function renderChapterDataBlocks(
       <LearningCard eyebrow={ui.chapter.patternSetEyebrow} title={ui.chapter.patternSetTitle}>
         <div className="data-list">
           {content.workflowPatterns.map((pattern) => (
-            <article className="data-item" key={pattern.id}>
+            <article className="data-item" id={`pattern-${pattern.id}`} key={pattern.id}>
               <h3>{pattern.title}</h3>
               <p>{pattern.means}</p>
               <dl>
@@ -168,7 +176,7 @@ function renderChapterDataBlocks(
       <LearningCard eyebrow={ui.chapter.gateSetEyebrow} title={ui.chapter.gateSetTitle}>
         <div className="data-list">
           {content.gates.map((gate) => (
-            <article className="data-item" key={gate.id}>
+            <article className="data-item" id={`gate-${gate.id}`} key={gate.id}>
               <h3>{gate.title}</h3>
               <p>{gate.purpose}</p>
               <dl>
@@ -271,7 +279,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
         />
       ))}
 
-      <RevealBlock checkpoint={chapter.checkpoint} ui={ui.learning} />
+      <RevealBlock checkpoint={chapter.checkpoint} locale={localeParam} ui={ui.learning} />
 
       {renderChapterDataBlocks(chapter.slug, content)}
 

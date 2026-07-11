@@ -30,7 +30,6 @@ export const learningChapters = [
           "An LLM can complete a plausible pattern that looks logical, but may not be true for this repo unless grounded in repo facts.",
           "The orchestrator determines the question type, chooses the right authority layer, checks the relevant source of truth, and picks the needed validation or quality gate.",
         ],
-        sourceRefs: ["karpathy-software-30"],
       },
       {
         id: "context-grounding",
@@ -60,7 +59,7 @@ export const learningChapters = [
         "When a recommendation relies on common practice but changes ownership, require repo evidence first.",
       relatedConcepts: ["authority layer", "source of truth", "ownership gate"],
     },
-    sourceRefs: ["karpathy-software-30"],
+    sourceRefs: [],
     interactive: "self-check",
   },
   {
@@ -613,11 +612,11 @@ export const learningChapters = [
     title: "Practice scenarios",
     eyebrow: "Capstone",
     summary:
-      "Mixed scenarios train the learner to combine authority, workflow, audit depth, gates, and durable correction.",
+      "Guided mixed scenarios show how authority, workflow, audit depth, gates, and durable correction combine before direct assessment.",
     practices: [
-      "Choose the orchestrator move in mixed situations.",
-      "Explain the consequence of each choice.",
-      "Name a durable correction candidate when appropriate.",
+      "Decompose a mixed situation before choosing the orchestrator move.",
+      "Use immediate feedback to connect choice and consequence.",
+      "Prepare to make the same decisions without scaffolding in direct practice.",
     ],
     sections: [
       {
@@ -625,10 +624,10 @@ export const learningChapters = [
         eyebrow: "Practice",
         title: "Cumulative practice",
         summary:
-          "The scenarios are short but mixed on purpose.",
+          "This chapter is the guided bridge into assessment mode.",
         paragraphs: [
           "Each scenario follows: situation -> choices -> consequence -> correct orchestrator move -> durable correction candidate.",
-          "Use them to practice ownership, source of truth, UI QA, zoom-out, workflow authority, durable correction, permission gates, and high-risk boundaries.",
+          "Use immediate feedback here to practice ownership, source of truth, UI QA, zoom-out, workflow authority, durable correction, permission gates, and high-risk boundaries. The direct practice route withholds feedback until submit.",
         ],
       },
     ],

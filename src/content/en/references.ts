@@ -1,104 +1,115 @@
 import type { Reference, ReferenceId } from "../schemas";
+import { referenceLifecycle } from "../reference-lifecycle";
 
 export const references = {
   "anthropic-building-effective-agents": {
     id: "anthropic-building-effective-agents",
     label: "Anthropic - Building effective agents",
     title: "Building effective agents",
-    url: "https://www.anthropic.com/engineering/building-effective-agents",
+    ...referenceLifecycle["anthropic-building-effective-agents"],
     category: "core",
-    status: "research-backlog-anchor",
+    scope:
+      "Workflow versus agent framing, six common workflow patterns, and simple-first agent-system design.",
     note:
-      "Research anchor for workflow versus agent framing, common workflow patterns, and simple-first agent system design.",
+      "Primary conceptual source for the course vocabulary; it does not prescribe a framework runtime.",
   },
   "anthropic-agent-evals": {
     id: "anthropic-agent-evals",
     label: "Anthropic - Agent evals",
     title: "Demystifying evals for AI agents",
-    url: "https://www.anthropic.com/engineering",
+    ...referenceLifecycle["anthropic-agent-evals"],
     category: "core",
-    status: "research-backlog-anchor",
+    scope:
+      "Agent eval structure, outcome and transcript evidence, and matching graders to the evaluated behavior.",
     note:
-      "Research anchor for treating evals as verification assets. Validate exact claims during a source-backed pass.",
+      "Supports the lightweight course framing of evals as durable verification assets, not a requirement to build an eval platform.",
   },
   "openai-practical-agents": {
     id: "openai-practical-agents",
     label: "OpenAI - Practical guide to agents",
     title: "A practical guide to building agents",
-    url: "https://platform.openai.com/docs",
+    ...referenceLifecycle["openai-practical-agents"],
     category: "core",
-    status: "research-backlog-anchor",
+    scope:
+      "Agent components, orchestration, guardrails, exit conditions, and incremental complexity guidance.",
     note:
-      "Research anchor for practical agent design and tool-use workflow concepts. Validate against current official docs later.",
+      "A practical architecture guide; product-specific API examples are not universal coding-agent behavior.",
   },
   "langgraph-workflows-agents": {
     id: "langgraph-workflows-agents",
     label: "LangGraph - Workflows and agents",
     title: "Workflows and agents",
-    url: "https://langchain-ai.github.io/langgraph/",
+    ...referenceLifecycle["langgraph-workflows-agents"],
     category: "core",
-    status: "research-backlog-anchor",
+    scope:
+      "Current LangGraph examples for workflow and agent patterns, including orchestrator-worker and evaluator-optimizer.",
     note:
-      "Framework-backed reference for workflows and agents. MVP uses the vocabulary only, not the runtime.",
+      "Framework-backed reference only. The MVP uses the vocabulary and does not require LangGraph runtime code.",
   },
   "langchain-human-in-loop": {
     id: "langchain-human-in-loop",
     label: "LangChain - Human in the loop",
     title: "Human-in-the-loop",
-    url: "https://docs.langchain.com/",
+    ...referenceLifecycle["langchain-human-in-loop"],
     category: "core",
-    status: "research-backlog-anchor",
+    scope:
+      "LangChain HITL interrupts and approve, edit, reject, or respond decisions for reviewed tool calls.",
     note:
-      "Research anchor for approve, edit, reject, or respond style human decisions in agent workflows.",
+      "Framework-specific terminology that illustrates human review; it is not a universal agent API.",
   },
   "willison-agent-definition": {
     id: "willison-agent-definition",
     label: "Simon Willison - Agent definition",
     title: "Agent definition notes",
-    url: "https://simonwillison.net/",
+    ...referenceLifecycle["willison-agent-definition"],
     category: "core",
-    status: "research-backlog-anchor",
+    scope:
+      "The opinionated definition of an LLM agent as a system that runs tools in a loop to achieve a goal.",
     note:
-      "Research anchor for compact agent definitions around tools in a loop. Validate exact wording later.",
+      "A compact heuristic definition used as learning vocabulary, not a formal standard.",
   },
   "karpathy-software-30": {
     id: "karpathy-software-30",
     label: "Karpathy - Software 3.0 notes",
     title: "Software 3.0 notes",
-    url: "https://karpathy.ai/",
+    ...referenceLifecycle["karpathy-software-30"],
     category: "advanced",
-    status: "research-backlog-anchor",
+    scope:
+      "Advanced, opinionated framing for natural-language-driven software and generation-verification workflows.",
     note:
-      "Advanced anchor for generation-verification and practical LLM workflow framing.",
+      "Author homepage retained as optional advanced reading, not evidence for a concrete course claim.",
   },
   "addy-osmani-loop-engineering": {
     id: "addy-osmani-loop-engineering",
     label: "Addy Osmani - Loop Engineering",
     title: "Loop Engineering",
-    url: "https://addyo.substack.com/",
+    ...referenceLifecycle["addy-osmani-loop-engineering"],
     category: "advanced",
-    status: "research-backlog-anchor",
+    scope:
+      "Opinionated next-layer framing for designing systems that repeatedly prompt, check, and coordinate coding agents.",
     note:
-      "Advanced reading only. Do not make this the MVP blueprint.",
+      "Advanced reading only. It must not become the MVP blueprint or imply cross-vendor feature parity.",
   },
   "openai-codex-docs": {
     id: "openai-codex-docs",
     label: "OpenAI Codex docs",
     title: "OpenAI Codex official docs",
-    url: "https://platform.openai.com/docs",
+    ...referenceLifecycle["openai-codex-docs"],
     category: "vendor-docs",
-    status: "current-docs-needed",
+    scope:
+      "Current Codex distinction between sandbox boundaries and approval policy across supported Codex surfaces.",
     note:
-      "Use only after checking current official docs for sandboxing, approvals, skills, and product behavior.",
+      "Codex-specific behavior verified for this source date; it must not be generalized to other coding agents.",
   },
   "claude-code-docs": {
     id: "claude-code-docs",
     label: "Claude Code docs",
     title: "Claude Code official docs",
-    url: "https://docs.anthropic.com/",
+    ...referenceLifecycle["claude-code-docs"],
     category: "vendor-docs",
-    status: "current-docs-needed",
+    scope:
+      "Current Claude Code permission rules, permission modes, and their relationship to sandboxing.",
     note:
-      "Use only after checking current official docs for permissions, security, skills, hooks, and subagents.",
+      "Claude Code-specific behavior verified for this source date; it must not be generalized to other coding agents.",
   },
 } satisfies Record<ReferenceId, Reference>;

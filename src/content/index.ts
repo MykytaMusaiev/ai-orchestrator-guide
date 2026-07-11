@@ -39,6 +39,7 @@ import { workflowPatterns as uaWorkflowPatterns } from "./ua/patterns";
 import type { Locale, LocalizedContent } from "./schemas";
 
 export { defaultLocale, htmlLangByLocale, isLocale, localeLabels, supportedLocales } from "./locales";
+export { relatedConceptTargets } from "./related-concepts";
 export type * from "./schemas";
 
 const localizedContent = {
@@ -83,4 +84,3 @@ const localizedContent = {
 export function getLocalizedContent(locale: Locale) {
   return localizedContent[locale];
 }
-

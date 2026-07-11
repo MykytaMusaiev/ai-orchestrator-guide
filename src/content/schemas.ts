@@ -23,9 +23,11 @@ export type ReferenceId =
   | "openai-codex-docs"
   | "claude-code-docs";
 
-export type ReferenceStatus = "research-backlog-anchor" | "current-docs-needed";
+export type ReferenceStatus = "verified-primary" | "advanced-reading";
 
 export type ReferenceCategory = "core" | "vendor-docs" | "advanced";
+
+export type ReferenceVolatility = "stable" | "vendor-specific" | "heuristic";
 
 export type GateId =
   | "validation"
@@ -43,6 +45,42 @@ export type WorkflowPatternId =
   | "orchestrator-worker"
   | "evaluator-optimizer"
   | "agent";
+
+export type DurableTargetId =
+  | "rule"
+  | "skill"
+  | "test"
+  | "docs-update"
+  | "validation-check"
+  | "quality-gate"
+  | "stop-condition";
+
+export type AssessmentVerdict =
+  | "aligned"
+  | "conditionally-valid"
+  | "misaligned"
+  | "unsafe";
+
+export type AssessmentReviewState =
+  | "aligned"
+  | "conditionally-reasonable"
+  | "needs-review";
+
+export type GateAssessmentClassification =
+  | "required"
+  | "useful"
+  | "unnecessary"
+  | "insufficient";
+
+export type CapstoneDimensionId =
+  | "authority-source"
+  | "workflow-audit"
+  | "next-action"
+  | "durable-correction";
+
+export type LoopAction = "continue" | "stop" | "zoom-out" | "ask-human";
+
+export type LoopOutcome = "complete" | "stopped" | "zoomed-out" | "escalated";
 
 export type ChapterNavItem = {
   id: string;
@@ -124,11 +162,84 @@ export type WorkflowClassifierCase = DecisionScenario & {
 
 export type LocalLearningCase = DecisionScenario & {
   failureSignal: string;
+  durableTargetId: DurableTargetId | "none";
   durableTarget: string;
 };
 
-export type PracticeScenario = DecisionScenario & {
+export type AssessmentChoice = {
+  id: string;
+  label: string;
+  verdict: AssessmentVerdict;
+  explanation: string;
+  changesWhen?: string;
+};
+
+export type CapstoneDimension = {
+  id: CapstoneDimensionId;
+  prompt: string;
+  memoryCue: string;
+  choiceOrder: string[];
+  choices: AssessmentChoice[];
+};
+
+export type GateAssessmentOption = {
+  gateId: GateId;
+  classification: GateAssessmentClassification;
+  explanation: string;
+};
+
+export type CapstoneAssessment = {
+  evidence: string[];
+  dimensions: CapstoneDimension[];
+  gatePrompt: string;
+  gateOptions: GateAssessmentOption[];
+  gateMemoryCue: string;
+  rationalePrompt: string;
+  rationaleDescription: string;
+  rationaleMemoryCue: string;
+  calibratedRationale: string;
+  rationaleRubric: string[];
+  transferQuestion: string;
+};
+
+type PracticeScenarioBase = DecisionScenario & {
   durableCorrectionCandidate: string;
+};
+
+export type CompactPracticeScenario = PracticeScenarioBase & {
+  kind: "compact";
+  evidence?: string[];
+};
+
+export type FullPracticeScenario = PracticeScenarioBase & {
+  kind: "full";
+  assessment: CapstoneAssessment;
+};
+
+export type PracticeScenario = CompactPracticeScenario | FullPracticeScenario;
+
+export type AgenticLoopTransition = {
+  id: string;
+  action: LoopAction;
+  label: string;
+  feedback: string;
+  nextNodeId?: string;
+  outcome?: LoopOutcome;
+};
+
+export type AgenticLoopNode = {
+  id: string;
+  title: string;
+  situation: string;
+  evidence: string[];
+  choices: AgenticLoopTransition[];
+};
+
+export type AgenticLoopCase = {
+  id: string;
+  title: string;
+  entryNodeId: string;
+  nodes: AgenticLoopNode[];
 };
 
 export type Gate = {
@@ -157,8 +268,17 @@ export type Reference = {
   url: string;
   category: ReferenceCategory;
   status: ReferenceStatus;
+  scope: string;
+  verifiedAt: string;
+  volatility: ReferenceVolatility;
+  vendorScope?: string;
   note: string;
 };
+
+export type ReferenceLifecycle = Pick<
+  Reference,
+  "url" | "status" | "verifiedAt" | "volatility" | "vendorScope"
+>;
 
 export type UiDictionary = {
   metadata: {
@@ -251,6 +371,31 @@ export type UiDictionary = {
     sourcePolicyEyebrow: string;
     sourcePolicyTitle: string;
     sourcePolicyBody: string;
+    operationalEyebrow: string;
+    operationalTitle: string;
+    operationalBody: string;
+    actionsTitle: string;
+    actionsBody: string;
+    loopDecisionsLink: string;
+    zoomOutLink: string;
+    gatesTitle: string;
+    gatesBody: string;
+    patternsTitle: string;
+    patternsBody: string;
+    checklistTitle: string;
+    checklistBody: string;
+    checklistLink: string;
+    practiceTitle: string;
+    practiceBody: string;
+    guidedPracticeLink: string;
+    directPracticeLink: string;
+    sourceLifecycle: {
+      scopeLabel: string;
+      verifiedLabel: string;
+      volatilityLabel: string;
+      vendorScopeLabel: string;
+      volatilityLabels: Record<ReferenceVolatility, string>;
+    };
     groups: {
       category: ReferenceCategory;
       eyebrow: string;
@@ -297,6 +442,50 @@ export type UiDictionary = {
     practiceScenariosTitle: string;
     practiceScenariosIntro: string;
     durableCorrectionCandidate: string;
+    guidedMode: string;
+    guidedModeIntro: string;
+    assessmentMode: string;
+    assessmentModeIntro: string;
+    evidence: string;
+    beginAssessment: string;
+    step: string;
+    of: string;
+    back: string;
+    nextStep: string;
+    submitDecision: string;
+    submitAssessment: string;
+    checkDecision: string;
+    continueAfterReview: string;
+    viewGuidedSummary: string;
+    reset: string;
+    retry: string;
+    requiredChoice: string;
+    requiredGates: string;
+    requiredRationale: string;
+    reviewTitle: string;
+    reviewIntro: string;
+    guidedReviewIntro: string;
+    decisionTrace: string;
+    traceLabels: Record<CapstoneDimensionId | "gates" | "rationale", string>;
+    detailedReview: string;
+    transferQuestion: string;
+    memoryCue: string;
+    evidenceWouldChange: string;
+    selfReviewed: string;
+    selectedAnswer: string;
+    calibratedRationale: string;
+    rationaleSelfReview: string;
+    rationaleNotGraded: string;
+    missingCriticalGates: string;
+    gateSelected: string;
+    gateNotSelected: string;
+    reviewStates: Record<AssessmentReviewState, string>;
+    gateClassifications: Record<GateAssessmentClassification, string>;
+    loopStage: string;
+    loopFeedback: string;
+    loopContinue: string;
+    loopOutcome: string;
+    loopOutcomes: Record<LoopOutcome, string>;
   };
 };
 
@@ -310,7 +499,7 @@ export type LocalizedContent = {
   selfCheckCards: readonly SelfCheckCard[];
   authorityMatrixCases: readonly AuthorityMatrixCase[];
   workflowClassifierCases: readonly WorkflowClassifierCase[];
-  agenticLoopCases: readonly DecisionScenario[];
+  agenticLoopCases: readonly AgenticLoopCase[];
   localLearningCases: readonly LocalLearningCase[];
   permissionRiskCases: readonly DecisionScenario[];
   practiceScenarios: readonly PracticeScenario[];

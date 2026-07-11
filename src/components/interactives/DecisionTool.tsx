@@ -1,15 +1,19 @@
 "use client";
 
 import { useId, useState } from "react";
-import type { DecisionScenario, GateId, UiDictionary } from "@/content";
+import Link from "next/link";
+import type { DecisionScenario, GateId, Locale, UiDictionary } from "@/content";
+import { getChapterSectionHref } from "@/lib/i18n/routing";
 
 type DecisionToolProps = {
   title: string;
   intro: string;
   scenarios: readonly DecisionScenario[];
   gateTitles: Record<GateId, string>;
+  locale: Locale;
   ui: UiDictionary["interactives"];
-  extraMeta?: (scenario: DecisionScenario) => React.ReactNode;
+  contextMeta?: (scenario: DecisionScenario) => React.ReactNode;
+  answerMeta?: (scenario: DecisionScenario) => React.ReactNode;
 };
 
 export function DecisionTool({
@@ -17,8 +21,10 @@ export function DecisionTool({
   intro,
   scenarios,
   gateTitles,
+  locale,
   ui,
-  extraMeta,
+  contextMeta,
+  answerMeta,
 }: DecisionToolProps) {
   const headingId = useId();
   const choiceGroupId = useId();
@@ -63,7 +69,7 @@ export function DecisionTool({
         <div className="interactive__situation">
           <h3>{scenario.title}</h3>
           <p>{scenario.situation}</p>
-          {extraMeta ? extraMeta(scenario) : null}
+          {contextMeta ? contextMeta(scenario) : null}
         </div>
 
         <div
@@ -99,10 +105,20 @@ export function DecisionTool({
             <p>
               <strong>{ui.consequence}</strong> {scenario.consequence}
             </p>
+            {answerMeta ? answerMeta(scenario) : null}
             {scenario.relatedGates.length ? (
               <div className="concept-row" aria-label={ui.relatedGates}>
                 {scenario.relatedGates.map((gateId) => (
-                  <span key={gateId}>{gateTitles[gateId]}</span>
+                  <Link
+                    href={getChapterSectionHref(
+                      "quality-gates",
+                      `gate-${gateId}`,
+                      locale,
+                    )}
+                    key={gateId}
+                  >
+                    {gateTitles[gateId]}
+                  </Link>
                 ))}
               </div>
             ) : null}

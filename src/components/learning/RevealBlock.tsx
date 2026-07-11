@@ -1,14 +1,18 @@
 "use client";
 
 import { useId, useState } from "react";
-import type { LearningCheckpoint, UiDictionary } from "@/content";
+import Link from "next/link";
+import type { LearningCheckpoint, Locale, UiDictionary } from "@/content";
+import { relatedConceptTargets } from "@/content/related-concepts";
+import { getChapterSectionHref } from "@/lib/i18n/routing";
 
 type RevealBlockProps = {
   checkpoint: LearningCheckpoint;
+  locale: Locale;
   ui: UiDictionary["learning"];
 };
 
-export function RevealBlock({ checkpoint, ui }: RevealBlockProps) {
+export function RevealBlock({ checkpoint, locale, ui }: RevealBlockProps) {
   const [isRevealed, setIsRevealed] = useState(false);
   const revealId = useId();
 
@@ -48,7 +52,20 @@ export function RevealBlock({ checkpoint, ui }: RevealBlockProps) {
           </div>
           <div className="concept-row" aria-label={ui.relatedConcepts}>
             {checkpoint.relatedConcepts.map((concept) => (
-              <span key={concept}>{concept}</span>
+              relatedConceptTargets[concept] ? (
+                <Link
+                  href={getChapterSectionHref(
+                    relatedConceptTargets[concept].chapterSlug,
+                    relatedConceptTargets[concept].fragment,
+                    locale,
+                  )}
+                  key={concept}
+                >
+                  {concept}
+                </Link>
+              ) : (
+                <span key={concept}>{concept}</span>
+              )
             ))}
           </div>
         </div>

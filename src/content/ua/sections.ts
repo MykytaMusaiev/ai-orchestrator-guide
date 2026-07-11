@@ -29,7 +29,6 @@ export const learningChapters = [
           "LLM може завершити plausible pattern, який виглядає логічно, але не є правдою для цього repo, доки його не заземлено у фактах repo.",
           "Orchestrator визначає тип питання, обирає правильний authority layer, перевіряє релевантний source of truth і підбирає validation або quality gate.",
         ],
-        sourceRefs: ["karpathy-software-30"],
       },
       {
         id: "context-grounding",
@@ -57,7 +56,7 @@ export const learningChapters = [
         "Коли рекомендація спирається на common practice, але змінює ownership, спершу вимагайте докази repo.",
       relatedConcepts: ["authority layer", "source of truth", "ownership gate"],
     },
-    sourceRefs: ["karpathy-software-30"],
+    sourceRefs: [],
     interactive: "self-check",
   },
   {
@@ -559,21 +558,21 @@ export const learningChapters = [
     status: "available",
     title: "Практичні сценарії",
     eyebrow: "Capstone",
-    summary: "Змішані сценарії тренують authority, workflow, глибину аудиту, gates і durable correction разом.",
+    summary: "Guided mixed scenarios показують, як authority, workflow, audit depth, gates і durable correction працюють разом перед direct assessment.",
     practices: [
-      "Обирати крок orchestrator у змішаних ситуаціях.",
-      "Пояснювати наслідок кожного вибору.",
-      "Називати кандидата на durable correction, коли доречно.",
+      "Декомпозувати mixed situation до вибору orchestrator move.",
+      "Використовувати immediate feedback, щоб пов'язати choice з consequence.",
+      "Підготуватися до тих самих рішень без scaffolding у direct practice.",
     ],
     sections: [
       {
         id: "capstone",
         eyebrow: "Practice",
         title: "Накопичувальна практика",
-        summary: "Сценарії короткі, але навмисно змішані.",
+        summary: "Цей chapter є guided bridge до assessment mode.",
         paragraphs: [
           "Кожен сценарій має форму: ситуація -> варіанти -> наслідок -> правильний крок orchestrator -> кандидат на durable correction.",
-          "Використовуйте їх, щоб практикувати ownership, source of truth, UI QA, zoom-out, workflow authority, durable correction, permission gates і high-risk boundaries.",
+          "Використовуйте immediate feedback, щоб відпрацювати ownership, source of truth, UI QA, zoom-out, workflow authority, durable correction, permission gates і high-risk boundaries. Route для direct practice приховує feedback до submit.",
         ],
       },
     ],

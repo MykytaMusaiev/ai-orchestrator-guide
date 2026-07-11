@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import type { ChapterNavItem, Locale, UiDictionary } from "@/content";
 import { getChapterHref, getPracticeHref, getReferencesHref } from "@/lib/i18n/routing";
@@ -24,22 +24,89 @@ export function MobileNavigation({
 }: MobileNavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const titleId = useId();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLElement>(null);
+  const shouldRestoreFocusRef = useRef(false);
+
+  const closeDialog = useCallback(() => {
+    shouldRestoreFocusRef.current = true;
+    setIsOpen(false);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) {
+      if (!shouldRestoreFocusRef.current) {
+        return;
+      }
+
+      shouldRestoreFocusRef.current = false;
+      const frame = window.requestAnimationFrame(() => {
+        triggerRef.current?.focus();
+      });
+
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    const dialog = dialogRef.current;
+
+    if (!dialog) {
       return;
     }
 
+    const getFocusableElements = () =>
+      Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((element) => !element.hasAttribute("hidden"));
+
+    const initialFocus =
+      dialog.querySelector<HTMLElement>('[aria-current="page"]') ??
+      dialog.querySelector<HTMLElement>("[data-chapter-link]") ??
+      getFocusableElements()[0] ??
+      dialog;
+
+    initialFocus.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsOpen(false);
+        event.preventDefault();
+        closeDialog();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusableElements = getFocusableElements();
+
+      if (!focusableElements.length) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (event.shiftKey && activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      } else if (!dialog.contains(activeElement)) {
+        event.preventDefault();
+        firstElement.focus();
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
 
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [closeDialog, isOpen]);
 
   return (
     <>
@@ -49,6 +116,7 @@ export function MobileNavigation({
           aria-expanded={isOpen}
           aria-haspopup="dialog"
           onClick={() => setIsOpen(true)}
+          ref={triggerRef}
           type="button"
         >
           {ui.navigation.chapters}
@@ -78,14 +146,17 @@ export function MobileNavigation({
           <button
             aria-label={ui.layout.closeChapterPicker}
             className="chapter-sheet__backdrop"
-            onClick={() => setIsOpen(false)}
+            onClick={closeDialog}
+            tabIndex={-1}
             type="button"
           />
           <section
             aria-labelledby={titleId}
             aria-modal="true"
             className="chapter-sheet__panel"
+            ref={dialogRef}
             role="dialog"
+            tabIndex={-1}
           >
             <div className="chapter-sheet__header">
               <span aria-hidden="true" />
@@ -93,7 +164,7 @@ export function MobileNavigation({
               <button
                 aria-label={ui.layout.closeChapters}
                 className="chapter-sheet__close"
-                onClick={() => setIsOpen(false)}
+                onClick={closeDialog}
                 type="button"
               >
                 <span aria-hidden="true">×</span>
@@ -112,9 +183,10 @@ export function MobileNavigation({
                   <Link
                     aria-current={isCurrent ? "page" : undefined}
                     className="chapter-sheet__item"
+                    data-chapter-link
                     href={getChapterHref(chapter, locale)}
                     key={chapter.id}
-                    onClick={() => setIsOpen(false)}
+                    onClick={closeDialog}
                   >
                     <span>{chapter.label}</span>
                     <strong>{chapter.title}</strong>

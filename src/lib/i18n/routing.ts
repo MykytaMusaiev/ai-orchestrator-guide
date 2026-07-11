@@ -11,6 +11,14 @@ export function getChapterHref(
   return `/${locale}/chapters/${chapter.slug}`;
 }
 
+export function getChapterSectionHref(
+  chapterSlug: string,
+  sectionId: string,
+  locale: Locale,
+) {
+  return `/${locale}/chapters/${chapterSlug}#${sectionId}`;
+}
+
 export function getPracticeHref(locale: Locale) {
   return `/${locale}/practice`;
 }

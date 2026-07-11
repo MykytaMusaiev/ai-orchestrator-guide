@@ -1,4 +1,4 @@
-import type { Reference } from "@/content";
+import type { Reference, UiDictionary } from "@/content";
 
 type SourceChipProps = {
   reference: Reference;
@@ -7,6 +7,7 @@ type SourceChipProps = {
 type SourceListProps = {
   references: readonly Reference[];
   label: string;
+  lifecycleUi?: UiDictionary["references"]["sourceLifecycle"];
 };
 
 export function SourceChip({ reference }: SourceChipProps) {
@@ -23,7 +24,7 @@ export function SourceChip({ reference }: SourceChipProps) {
   );
 }
 
-export function SourceList({ references, label }: SourceListProps) {
+export function SourceList({ references, label, lifecycleUi }: SourceListProps) {
   return (
     <div className="source-list" aria-label={label}>
       {references.map((reference) => (
@@ -31,6 +32,28 @@ export function SourceList({ references, label }: SourceListProps) {
           <div>
             <SourceChip reference={reference} />
             <p>{reference.note}</p>
+            {lifecycleUi ? (
+              <dl className="source-lifecycle">
+                <div>
+                  <dt>{lifecycleUi.scopeLabel}</dt>
+                  <dd>{reference.scope}</dd>
+                </div>
+                <div>
+                  <dt>{lifecycleUi.verifiedLabel}</dt>
+                  <dd>{reference.verifiedAt}</dd>
+                </div>
+                <div>
+                  <dt>{lifecycleUi.volatilityLabel}</dt>
+                  <dd>{lifecycleUi.volatilityLabels[reference.volatility]}</dd>
+                </div>
+                {reference.vendorScope ? (
+                  <div>
+                    <dt>{lifecycleUi.vendorScopeLabel}</dt>
+                    <dd>{reference.vendorScope}</dd>
+                  </div>
+                ) : null}
+              </dl>
+            ) : null}
           </div>
         </article>
       ))}

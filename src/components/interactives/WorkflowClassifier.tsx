@@ -3,6 +3,7 @@
 import type {
   DecisionScenario,
   GateId,
+  Locale,
   UiDictionary,
   WorkflowClassifierCase,
   WorkflowPatternId,
@@ -13,6 +14,7 @@ import { DecisionTool } from "./DecisionTool";
 type WorkflowClassifierProps = {
   cases: readonly WorkflowClassifierCase[];
   gateTitles: Record<GateId, string>;
+  locale: Locale;
   patterns: readonly WorkflowPattern[];
   ui: UiDictionary["interactives"];
 };
@@ -20,6 +22,7 @@ type WorkflowClassifierProps = {
 export function WorkflowClassifier({
   cases,
   gateTitles,
+  locale,
   patterns,
   ui,
 }: WorkflowClassifierProps) {
@@ -32,8 +35,9 @@ export function WorkflowClassifier({
       intro={ui.workflowClassifierIntro}
       scenarios={cases}
       gateTitles={gateTitles}
+      locale={locale}
       ui={ui}
-      extraMeta={(scenario: DecisionScenario) => {
+      answerMeta={(scenario: DecisionScenario) => {
         const item = scenario as WorkflowClassifierCase;
         const pattern = getPattern(item.patternId);
 
